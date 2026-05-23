@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BiteRush – Food Delivery</title>
+  <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+</head>
+<body>
+
+  <!-- ========== NAVBAR ========== -->
+  <header class="navbar">
+    <div class="nav-logo">
+      <span class="logo-icon">🍔</span>
+      <span class="logo-text">Bite<span class="accent">Rush</span></span>
+    </div>
+    <nav class="nav-links">
+      <a href="#">Menu</a>
+      <a href="#">Offers</a>
+      <a href="#">Track</a>
+    </nav>
+    <div class="nav-right">
+      <div class="location-badge">📍 Agra, UP</div>
+      <button class="cart-btn" id="cartToggleBtn">
+        🛒 Cart <span class="cart-count" id="cartCount">0</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- ========== HERO ========== -->
+  <section class="hero" id="heroSection">
+    <div class="hero-text">
+      <p class="hero-tag">Fast. Fresh. Delivered.</p>
+      <h1>Hungry? <br/><span class="accent">We've got you.</span></h1>
+      <p class="hero-sub">Order from 200+ restaurants near you. Earn points while you wait!</p>
+    </div>
+    <div class="hero-illustration">🍕🌮🍜🍣🧆</div>
+  </section>
+
+  <!-- ========== FILTER TABS ========== -->
+  <section class="filter-section" id="menuSection">
+    <div class="filter-tabs">
+      <button class="tab active" data-filter="all">🍽 All</button>
+      <button class="tab" data-filter="popular">🔥 Popular</button>
+      <button class="tab" data-filter="burger">🍔 Burgers</button>
+      <button class="tab" data-filter="pizza">🍕 Pizza</button>
+      <button class="tab" data-filter="chinese">🍜 Chinese</button>
+      <button class="tab" data-filter="dessert">🍰 Desserts</button>
+    </div>
+  </section>
+
+  <!-- ========== FOOD GRID ========== -->
+  <main class="food-grid-wrapper">
+    <div class="food-grid" id="foodGrid">
+      <!-- Cards injected by JS -->
+    </div>
+  </main>
+
+  <!-- ========== CART SIDEBAR ========== -->
+  <aside class="cart-sidebar" id="cartSidebar">
+    <div class="cart-header">
+      <h3>Your Order 🛒</h3>
+      <button class="close-cart" id="closeCart">✕</button>
+    </div>
+    <div class="cart-items" id="cartItems">
+      <p class="cart-empty">Your cart is empty.<br/>Add something delicious!</p>
+    </div>
+    <div class="cart-footer" id="cartFooter" style="display:none">
+      <div class="cart-total">
+        <span>Subtotal</span><span id="cartSubtotal">₹0</span>
+      </div>
+      <div class="cart-total">
+        <span>Delivery fee</span><span>₹30</span>
+      </div>
+      <div class="cart-total grand">
+        <span>Total</span><span id="cartTotal">₹30</span>
+      </div>
+      <button class="checkout-btn" id="placeOrderBtn">Place Order 🚀</button>
+    </div>
+  </aside>
+  <div class="cart-overlay" id="cartOverlay"></div>
+
+  <!-- ========== DELIVERY TRACKER ========== -->
+  <section class="tracker-section" id="trackerSection" style="display:none">
+    <div class="tracker-card">
+      <div class="tracker-header">
+        <h2>Order Confirmed! 🎉</h2>
+        <p class="tracker-sub" id="trackerOrderId">Order #BR2847 · Estimated 30–35 min</p>
+      </div>
+
+      <!-- Timeline -->
+      <div class="timeline" id="timeline">
+        <div class="tl-step completed" id="step-0">
+          <div class="tl-dot"><span>✓</span></div>
+          <div class="tl-line"></div>
+          <div class="tl-info">
+            <strong>Order Confirmed</strong>
+            <small>We got your order!</small>
+          </div>
+        </div>
+        <div class="tl-step" id="step-1">
+          <div class="tl-dot"><span>🍳</span></div>
+          <div class="tl-line"></div>
+          <div class="tl-info">
+            <strong>Restaurant Preparing</strong>
+            <small>Chef is cooking your meal</small>
+          </div>
+        </div>
+        <div class="tl-step" id="step-2">
+          <div class="tl-dot"><span>🛵</span></div>
+          <div class="tl-line"></div>
+          <div class="tl-info">
+            <strong>Delivery Partner Assigned</strong>
+            <small>Rahul is on the way</small>
+          </div>
+        </div>
+        <div class="tl-step" id="step-3">
+          <div class="tl-dot"><span>📦</span></div>
+          <div class="tl-line"></div>
+          <div class="tl-info">
+            <strong>Out for Delivery</strong>
+            <small>Your food is nearby</small>
+          </div>
+        </div>
+        <div class="tl-step" id="step-4">
+          <div class="tl-dot"><span>🎉</span></div>
+          <div class="tl-info">
+            <strong>Delivered!</strong>
+            <small>Enjoy your meal 😋</small>
+          </div>
+        </div>
+      </div>
+
+      <!-- Delivery success message (hidden until done) -->
+      <div class="delivery-success" id="deliverySuccess" style="display:none">
+        <div class="success-emoji">🥳</div>
+        <h3>Your food has arrived!</h3>
+        <p>Hope you enjoy every bite. Come back soon for more rewards!</p>
+        <button class="reorder-btn" id="reorderBtn">Order Again 🍔</button>
+      </div>
+    </div>
+
+    <!-- ========== GAMIFICATION PANEL ========== -->
+    <div class="game-panel" id="gamePanel">
+      <div class="game-panel-header">
+        <h2>Play While You Wait 🎮</h2>
+        <p>Earn points → Unlock rewards!</p>
+        <!-- Points display -->
+        <div class="points-bar">
+          <span class="pts-label">⭐ Total Points:</span>
+          <span class="pts-value" id="totalPoints">0</span>
+          <div class="pts-progress-wrap">
+            <div class="pts-progress" id="ptsProgress" style="width:0%"></div>
+          </div>
+          <span class="pts-goal-label" id="ptsGoalLabel">50 pts = ₹20 OFF</span>
+        </div>
+      </div>
+
+      <!-- Reward badges -->
+      <div class="rewards-row" id="rewardsRow">
+        <div class="reward-badge" id="reward-50">
+          <span class="badge-icon">🎟</span>
+          <span class="badge-label">₹20 OFF</span>
+          <span class="badge-pts">50 pts</span>
+        </div>
+        <div class="reward-badge" id="reward-100">
+          <span class="badge-icon">🚀</span>
+          <span class="badge-label">Free Delivery</span>
+          <span class="badge-pts">100 pts</span>
+        </div>
+        <div class="reward-badge" id="reward-200">
+          <span class="badge-icon">👑</span>
+          <span class="badge-label">₹50 OFF</span>
+          <span class="badge-pts">200 pts</span>
+        </div>
+      </div>
+
+      <!-- Coupon unlocked banner -->
+      <div class="coupon-banner" id="couponBanner" style="display:none">
+        <span class="coupon-icon">🎉</span>
+        <span id="couponText">You unlocked ₹20 OFF! Use code <strong>BITE20</strong></span>
+      </div>
+
+      <!-- Game selector tabs -->
+      <div class="game-tabs">
+        <button class="game-tab active" data-game="catch" onclick="switchGame('catch')">🥦 Ingredient Catch</button>
+        <button class="game-tab" data-game="tap" onclick="switchGame('tap')">👆 Quick Tap</button>
+        <button class="game-tab" data-game="memory" onclick="switchGame('memory')">🧠 Memory Match</button>
+      </div>
+
+      <!-- ===== GAME 1: INGREDIENT CATCH ===== -->
+      <div class="game-container" id="game-catch">
+        <div class="game-info-bar">
+          <span>⭐ Score: <strong id="catchScore">0</strong></span>
+          <span>⏱ Time: <strong id="catchTimer">30s</strong></span>
+          <button class="restart-btn" onclick="startCatch()">↺ Restart</button>
+        </div>
+        <div class="catch-arena" id="catchArena">
+          <div class="catch-start-msg" id="catchStartMsg">
+            <h3>🥦 Ingredient Catch</h3>
+            <p>Click falling ingredients to score points!</p>
+            <button class="start-game-btn" onclick="startCatch()">Start Game</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== GAME 2: QUICK TAP ===== -->
+      <div class="game-container" id="game-tap" style="display:none">
+        <div class="game-info-bar">
+          <span>👆 Taps: <strong id="tapCount">0</strong></span>
+          <span>⏱ Time: <strong id="tapTimer">10s</strong></span>
+          <button class="restart-btn" onclick="startTap()">↺ Restart</button>
+        </div>
+        <div class="tap-arena" id="tapArena">
+          <div class="tap-start-msg" id="tapStartMsg">
+            <h3>👆 Quick Tap Challenge</h3>
+            <p>Tap the button as many times as you can in 10 seconds!</p>
+            <button class="start-game-btn" onclick="startTap()">Start Game</button>
+          </div>
+          <button class="tap-button" id="tapButton" style="display:none" onclick="registerTap()">
+            TAP! 🔥
+          </button>
+          <div class="tap-result" id="tapResult" style="display:none">
+            <h3 id="tapResultText"></h3>
+            <button class="start-game-btn" onclick="startTap()">Play Again</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== GAME 3: MEMORY MATCH ===== -->
+      <div class="game-container" id="game-memory" style="display:none">
+        <div class="game-info-bar">
+          <span>🧠 Matches: <strong id="memoryMatches">0</strong>/8</span>
+          <span>⏱ Time: <strong id="memoryTimer">60s</strong></span>
+          <button class="restart-btn" onclick="startMemory()">↺ Restart</button>
+        </div>
+        <div class="memory-arena" id="memoryArena">
+          <div class="memory-start-msg" id="memoryStartMsg">
+            <h3>🧠 Memory Match</h3>
+            <p>Match all food emoji pairs before time runs out!</p>
+            <button class="start-game-btn" onclick="startMemory()">Start Game</button>
+          </div>
+          <div class="memory-grid" id="memoryGrid" style="display:none"></div>
+        </div>
+      </div>
+
+    </div><!-- end game-panel -->
+  </section>
+
+  <!-- ========== TOAST NOTIFICATION ========== -->
+  <div class="toast" id="toast"></div>
+
+  <script src="script.js"></script>
+</body>
+</html>
